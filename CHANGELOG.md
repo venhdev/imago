@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2]
+
+### Fixed
+- Fixed placeholder icon centering issue in default placeholder widget
+- Improved placeholder widget styling with consistent border radius
+
 ## [1.0.0]
 
 ### Added

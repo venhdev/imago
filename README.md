@@ -18,7 +18,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  imago: ^1.0.0
+  imago: ^1.0.2
 ```
 
 Then run:
