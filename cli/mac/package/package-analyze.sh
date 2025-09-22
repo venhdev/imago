@@ -1,0 +1,2 @@
+#!/bin/bash
+dart format --output=none --set-exit-if-changed . && flutter analyze && dart pub publish --dry-run

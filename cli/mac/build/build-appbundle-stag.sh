@@ -1,0 +1,2 @@
+#!/bin/bash
+flutter build appbundle --flavor prod --dart-define-from-file .env.dev
