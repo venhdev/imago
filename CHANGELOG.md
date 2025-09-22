@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3]
+
+### Added
+- Enhanced constructor with more image control options
+
+### Fixed
+- Fixed placeholder icon centering
+
 ## [1.0.2]
 
 ### Fixed

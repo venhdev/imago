@@ -82,6 +82,22 @@ class Imago extends StatelessWidget {
     this.borderRadius = BorderRadius.zero,
     this.placeholderBuilder,
     this.showProgressIndicator = false,
+    this.semanticLabel,
+    this.excludeFromSemantics = false,
+    this.opacity,
+    this.centerSlice,
+    this.gaplessPlayback = false,
+    this.isAntiAlias = false,
+    this.cacheWidth,
+    this.cacheHeight,
+    this.scale = 1.0,
+    this.clipBehavior = Clip.antiAlias,
+    this.clipper,
+    this.bundle,
+    this.package,
+    this.allowDrawingOutsideViewBox = false,
+    this.theme,
+    this.colorMapper,
   });
 
   /// Factory constructor for creating an Imago widget with local SVG assets.
@@ -99,6 +115,7 @@ class Imago extends StatelessWidget {
     BorderRadiusGeometry borderRadius = BorderRadius.zero,
     Color? color,
     bool? shrinkOnError,
+    bool? shrinkOnLoading,
   }) {
     return Imago(
       (url != null)
@@ -111,6 +128,7 @@ class Imago extends StatelessWidget {
       borderRadius: borderRadius,
       color: color,
       shrinkOnError: shrinkOnError ?? false,
+      shrinkOnLoading: shrinkOnLoading ?? false,
     );
   }
 
@@ -126,6 +144,7 @@ class Imago extends StatelessWidget {
     BoxFit? fit,
     BorderRadiusGeometry borderRadius = BorderRadius.zero,
     bool? shrinkOnError,
+    bool? shrinkOnLoading,
   }) {
     return Imago(
       url,
@@ -135,6 +154,7 @@ class Imago extends StatelessWidget {
       type: ImageType.file,
       borderRadius: borderRadius,
       shrinkOnError: shrinkOnError ?? false,
+      shrinkOnLoading: shrinkOnLoading ?? false,
     );
   }
 
@@ -153,6 +173,7 @@ class Imago extends StatelessWidget {
     BorderRadiusGeometry borderRadius = BorderRadius.zero,
     Color? color,
     bool? shrinkOnError,
+    bool? shrinkOnLoading,
   }) {
     return Imago(
       (url != null)
@@ -165,6 +186,7 @@ class Imago extends StatelessWidget {
       borderRadius: borderRadius,
       color: color,
       shrinkOnError: shrinkOnError ?? false,
+      shrinkOnLoading: shrinkOnLoading ?? false,
     );
   }
 
@@ -341,42 +363,64 @@ class Imago extends StatelessWidget {
   /// Whether to show progress indicator during loading.
   final bool showProgressIndicator;
 
-  /// Checks if an asset file exists in the bundle.
-  ///
-  /// This method attempts to load the asset and returns true if it exists,
-  /// false otherwise. Note that this is an asynchronous operation.
-  static Future<bool> assetExists(String assetPath) async {
-    try {
-      await DefaultAssetBundle.of(WidgetsBinding.instance.rootElement!)
-          .load(assetPath);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
+  /// Semantic label for accessibility.
+  final String? semanticLabel;
 
-  /// Synchronously checks if an asset file exists by attempting to create
-  /// an Image.asset widget and catching any errors.
-  ///
-  /// This is a synchronous alternative to [assetExists] but may not be
-  /// as reliable in all cases.
-  static bool assetExistsSync(String assetPath) {
-    try {
-      // This will throw an exception if the asset doesn't exist
-      Image.asset(assetPath);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
+  /// Whether to exclude this image from semantics.
+  final bool excludeFromSemantics;
+
+  /// Opacity animation for the image.
+  final Animation<double>? opacity;
+
+  /// Center slice for nine-patch images.
+  final Rect? centerSlice;
+
+  /// Whether to use gapless playback for animated images.
+  final bool gaplessPlayback;
+
+  /// Whether to use anti-aliasing.
+  final bool isAntiAlias;
+
+  /// Cache width for the image.
+  final int? cacheWidth;
+
+  /// Cache height for the image.
+  final int? cacheHeight;
+
+  /// Scale factor for the image.
+  final double scale;
+
+  /// Clip behavior for the container.
+  final Clip clipBehavior;
+
+  /// Custom clipper for the container.
+  final CustomClipper<RRect>? clipper;
+
+  /// Asset bundle to load assets from.
+  final AssetBundle? bundle;
+
+  /// Package name for assets.
+  final String? package;
+
+  /// Whether to allow drawing outside view box for SVG.
+  final bool allowDrawingOutsideViewBox;
+
+  /// SVG theme for styling.
+  final SvgTheme? theme;
+
+  /// Color mapper for SVG.
+  final ColorMapper? colorMapper;
 
   /// Default placeholder widget when no custom placeholder is provided.
   Widget get _placeholderWidget => ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: borderRadius,
+        clipper: clipper,
+        clipBehavior: clipBehavior,
         child: Container(
           width: width,
           height: height,
           color: Colors.grey.shade200,
+          alignment: Alignment.center,
           child: Icon(
             Icons.image_outlined,
             size: (width != null && height != null)
@@ -398,6 +442,8 @@ class Imago extends StatelessWidget {
     if (type == ImageType.localSvg) {
       return ClipRRect(
         borderRadius: borderRadius,
+        clipper: clipper,
+        clipBehavior: clipBehavior,
         child: SvgPicture.asset(
           imageUrl,
           fit: fit ?? BoxFit.contain,
@@ -406,50 +452,113 @@ class Imago extends StatelessWidget {
               : null,
           width: width,
           height: height,
+          bundle: bundle,
+          package: package,
+          matchTextDirection: matchTextDirection,
+          allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
           placeholderBuilder: (context) {
             if (shrinkOnError) return const SizedBox.shrink();
             return _placeholderWidget;
           },
+          semanticsLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          clipBehavior: clipBehavior,
+          theme: theme,
+          colorMapper: colorMapper,
         ),
       );
     } else if (type == ImageType.localImage) {
       return ClipRRect(
         borderRadius: borderRadius,
+        clipper: clipper,
+        clipBehavior: clipBehavior,
         child: Image.asset(
           imageUrl,
           fit: fit ?? BoxFit.contain,
           width: width,
           filterQuality: filterQuality,
           height: height,
+          scale: scale,
+          bundle: bundle,
+          package: package,
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (opacity != null) {
+              return FadeTransition(
+                opacity: opacity!,
+                child: child,
+              );
+            }
+            return child;
+          },
           errorBuilder: (context, error, stackTrace) {
             if (shrinkOnError) return const SizedBox.shrink();
             return _placeholderWidget;
           },
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          color: color,
+          colorBlendMode: colorBlendMode,
+          alignment: alignment,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          isAntiAlias: isAntiAlias,
+          cacheWidth: cacheWidth,
+          cacheHeight: cacheHeight,
         ),
       );
     } else if (type == ImageType.file) {
       return ClipRRect(
         borderRadius: borderRadius,
+        clipper: clipper,
+        clipBehavior: clipBehavior,
         child: Image.file(
           File(imageUrl),
-          fit: BoxFit.cover,
+          fit: fit ?? BoxFit.cover,
           height: height,
           width: width,
+          scale: scale,
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (opacity != null) {
+              return FadeTransition(
+                opacity: opacity!,
+                child: child,
+              );
+            }
+            return child;
+          },
           errorBuilder: (context, error, stackTrace) {
             if (shrinkOnError) return const SizedBox.shrink();
             return _placeholderWidget;
           },
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          color: color,
+          colorBlendMode: colorBlendMode,
+          alignment: alignment,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          isAntiAlias: isAntiAlias,
+          filterQuality: filterQuality,
+          cacheWidth: cacheWidth,
+          cacheHeight: cacheHeight,
         ),
       );
     }
 
     return ClipRRect(
       borderRadius: borderRadius,
+      clipper: clipper,
+      clipBehavior: clipBehavior,
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         height: height,
         width: width,
         fit: fit,
+        scale: scale,
         placeholder: !showProgressIndicator
             ? (context, url) {
                 return shrinkOnLoading
@@ -459,7 +568,9 @@ class Imago extends StatelessWidget {
             : null,
         errorWidget: errorWidget ??
             (context, url, error) {
-              return _placeholderWidget;
+              return shrinkOnError
+                  ? const SizedBox.shrink()
+                  : _placeholderWidget;
             },
         httpHeaders: httpHeaders,
         imageBuilder: imageBuilder,

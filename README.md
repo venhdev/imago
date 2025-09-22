@@ -4,6 +4,11 @@ A powerful and flexible image widget for Flutter applications with support for n
 
 [![pub package](https://img.shields.io/pub/v/imago.svg)](https://pub.dev/packages/imago)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Flutter](https://img.shields.io/badge/Flutter-3.0+-blue.svg)](https://flutter.dev/)
+[![Dart](https://img.shields.io/badge/Dart-3.0+-blue.svg)](https://dart.dev/)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://flutter.dev/)
+[![GitHub stars](https://img.shields.io/github/stars/venhdev/imago.svg?style=social&label=Star)](https://github.com/venhdev/imago)
+[![GitHub forks](https://img.shields.io/github/forks/venhdev/imago.svg?style=social&label=Fork)](https://github.com/venhdev/imago)
 
 ## Features
 
@@ -18,7 +23,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  imago: ^1.0.2
+  imago: ^1.0.3
 ```
 
 Then run:
@@ -49,11 +54,11 @@ import 'package:imago/imago.dart';
 // Network image
 Imago('https://example.com/image.jpg')
 
-// Local SVG
-Imago.localSvg('icon_name')
+// Local SVG (/assets/svg/...)
+Imago.localSvg('icons/icon_name')  // Resolves to assets/svg/icons/icon_name.svg
 
-// Local image
-Imago.localImage('image_name')
+// Local image (/assets/images/...)
+Imago.localImage('logos/logo_name')  // Resolves to assets/images/logos/logo_name.png
 
 // File image
 Imago.file('/path/to/image.jpg')
@@ -109,6 +114,10 @@ Imago('https://example.com/image.jpg')
 // Automatically resolves to 'assets/svg/icon.svg'
 Imago.localSvg('icon')
 
+// With folder structure (/assets/svg/icons/...)
+Imago.localSvg('icons/add')  // Resolves to assets/svg/icons/add.svg
+Imago.localSvg('illustrations/onboarding1')  // Resolves to assets/svg/illustrations/onboarding1.svg
+
 // Or use full path
 Imago.localSvg('assets/svg/custom/icon.svg')
 ```
@@ -117,6 +126,12 @@ Imago.localSvg('assets/svg/custom/icon.svg')
 ```dart
 // Automatically resolves to 'assets/images/image.png'
 Imago.localImage('image')
+
+// With folder structure (/assets/images/...)
+Imago.localImage('icons/add')  // Resolves to assets/images/icons/add.png
+Imago.localImage('logos/app_logo')  // Resolves to assets/images/logos/app_logo.png
+Imago.localImage('illustrations/onboarding1')  // Resolves to assets/images/illustrations/onboarding1.png
+Imago.localImage('placeholders/placeholder')  // Resolves to assets/images/placeholders/placeholder.png
 
 // Or use full path
 Imago.localImage('assets/images/custom/image.png')
@@ -192,32 +207,10 @@ Imago(
 )
 ```
 
-### Asset Existence Checking
-
-```dart
-// Check if asset exists (async)
-bool exists = await Imago.assetExists('assets/images/placeholders/placeholder.png');
-
-// Check if asset exists (sync)
-bool exists = Imago.assetExistsSync('assets/images/placeholders/placeholder.png');
-
-// Use with conditional logic
-if (Imago.assetExistsSync('assets/images/custom/placeholder.png')) {
-  Imago('https://example.com/image.jpg', placeholder: 'assets/images/custom/placeholder.png')
-} else {
-  // Uses default icon-based placeholder
-  Imago('https://example.com/image.jpg')
-}
-```
 
 ### Default Placeholder
 
 Imago now uses an icon-based placeholder by default (`Icons.image_outlined`) instead of requiring a placeholder image asset. This provides:
-
-- **No asset dependency** - No need to include placeholder images
-- **Consistent appearance** - Uses Material Design icons
-- **Responsive sizing** - Icon scales with container size
-- **Better performance** - No asset loading required
 
 ## API Reference
 
@@ -236,6 +229,13 @@ Imago now uses an icon-based placeholder by default (`Icons.image_outlined`) ins
 | `showProgressIndicator` | `bool` | `false` | Show progress indicator |
 | `shrinkOnError` | `bool` | `false` | Shrink widget on error |
 | `shrinkOnLoading` | `bool` | `false` | Shrink widget while loading |
+| `hero` | `String?` | - | Hero tag for animations |
+| `httpHeaders` | `Map<String, String>?` | - | HTTP headers for network requests |
+| `fadeInDuration` | `Duration` | `Duration(milliseconds: 500)` | Fade in animation duration |
+| `fadeOutDuration` | `Duration` | `Duration(milliseconds: 1000)` | Fade out animation duration |
+| `memCacheWidth` | `int?` | - | Maximum width for memory cache |
+| `memCacheHeight` | `int?` | - | Maximum height for memory cache |
+| `cacheKey` | `String?` | - | Cache key for the image |
 
 ### ImageType Enum
 
@@ -264,4 +264,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-If you encounter any issues or have questions, please file an issue on the [GitHub repository](https://github.com/your-username/imago/issues).
+If you encounter any issues or have questions, please file an issue on the [GitHub repository](https://github.com/venhdev/imago/issues).
