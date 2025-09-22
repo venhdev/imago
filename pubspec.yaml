@@ -1,10 +1,16 @@
 name: imago
 description: "A powerful and flexible image widget for Flutter applications with support for network images, local assets, and file images."
 version: 1.0.3
-homepage: https://github.com/your-username/imago
-repository: https://github.com/your-username/imago
-issue_tracker: https://github.com/your-username/imago/issues
-documentation: https://github.com/your-username/imago#readme
+homepage: https://github.com/venhdev/imago
+repository: https://github.com/venhdev/imago
+issue_tracker: https://github.com/venhdev/imago/issues
+documentation: https://github.com/venhdev/imago#readme
+topics:
+  - flutter
+  - image
+  - widget
+  - svg
+  - caching
 
 environment:
   sdk: ^3.0.0

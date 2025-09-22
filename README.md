@@ -3,12 +3,15 @@
 A powerful and flexible image widget for Flutter applications with support for network images, local assets, and file images.
 
 [![pub package](https://img.shields.io/pub/v/imago.svg)](https://pub.dev/packages/imago)
+[![pub points](https://img.shields.io/pub/points/imago.svg)](https://pub.dev/packages/imago/score)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Flutter](https://img.shields.io/badge/Flutter-3.0+-blue.svg)](https://flutter.dev/)
-[![Dart](https://img.shields.io/badge/Dart-3.0+-blue.svg)](https://dart.dev/)
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://flutter.dev/)
-[![GitHub stars](https://img.shields.io/github/stars/venhdev/imago.svg?style=social&label=Star)](https://github.com/venhdev/imago)
-[![GitHub forks](https://img.shields.io/github/forks/venhdev/imago.svg?style=social&label=Fork)](https://github.com/venhdev/imago)
+[![GitHub last commit](https://img.shields.io/github/last-commit/venhdev/imago.svg)](https://github.com/venhdev/imago)
+[![GitHub release](https://img.shields.io/github/v/release/venhdev/imago.svg)](https://github.com/venhdev/imago/releases)
+[![GitHub code size](https://img.shields.io/github/languages/code-size/venhdev/imago.svg)](https://github.com/venhdev/imago)
+[![GitHub top language](https://img.shields.io/github/languages/top/venhdev/imago.svg)](https://github.com/venhdev/imago)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/venhdev/imago/publish.yml?branch=main)](https://github.com/venhdev/imago/actions)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://codecov.io/gh/venhdev/imago)
+[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/venhdev/imago)
 
 ## Features
 
@@ -16,21 +19,6 @@ A powerful and flexible image widget for Flutter applications with support for n
 - 🚀 **Built-in Caching**: Automatic caching for network images using `cached_network_image`
 - 🎨 **Customizable Placeholders**: Custom placeholder widgets and error handling
 - 🛡️ **Error Handling**: Graceful error handling with customizable error widgets
-
-## Getting Started
-
-Add this to your package's `pubspec.yaml` file:
-
-```yaml
-dependencies:
-  imago: ^1.0.3
-```
-
-Then run:
-
-```bash
-flutter pub get
-```
 
 ## Assets Structure
 
@@ -43,104 +31,6 @@ Place your assets in these directories for automatic path resolution:
 Imago automatically resolves paths:
 - `Imago.localSvg('icons/icon')` → `assets/svg/icons/icon.svg`
 - `Imago.localImage('logos/logo')` → `assets/images/logos/logo.png`
-
-## Usage
-
-### Basic Usage
-
-```dart
-import 'package:imago/imago.dart';
-
-// Network image
-Imago('https://example.com/image.jpg')
-
-// Local SVG (/assets/svg/...)
-Imago.localSvg('icons/icon_name')  // Resolves to assets/svg/icons/icon_name.svg
-
-// Local image (/assets/images/...)
-Imago.localImage('logos/logo_name')  // Resolves to assets/images/logos/logo_name.png
-
-// File image
-Imago.file('/path/to/image.jpg')
-```
-
-### Advanced Usage
-
-```dart
-// Network image with fallback
-Imago.of(
-  remoteUrl: 'https://example.com/image.jpg',
-  localFallback: 'placeholder',
-  localFallbackType: ImageType.localImage,
-  width: 200,
-  height: 200,
-  borderRadius: BorderRadius.circular(10),
-  showProgressIndicator: true,
-)
-
-// Custom placeholder
-Imago(
-  'https://example.com/image.jpg',
-  width: 100,
-  height: 100,
-  placeholderBuilder: (context) => Container(
-    color: Colors.grey[300],
-    child: Icon(Icons.image),
-  ),
-  errorWidget: (context, url, error) => Container(
-    color: Colors.red[100],
-    child: Icon(Icons.error),
-  ),
-)
-
-// SVG with custom styling
-Imago.localSvg(
-  'icon_name',
-  size: 24,
-  color: Colors.blue,
-  borderRadius: BorderRadius.circular(4),
-)
-```
-
-### Image Types
-
-#### Network Images
-```dart
-Imago('https://example.com/image.jpg')
-```
-
-#### Local SVG Assets
-```dart
-// Automatically resolves to 'assets/svg/icon.svg'
-Imago.localSvg('icon')
-
-// With folder structure (/assets/svg/icons/...)
-Imago.localSvg('icons/add')  // Resolves to assets/svg/icons/add.svg
-Imago.localSvg('illustrations/onboarding1')  // Resolves to assets/svg/illustrations/onboarding1.svg
-
-// Or use full path
-Imago.localSvg('assets/svg/custom/icon.svg')
-```
-
-#### Local Image Assets
-```dart
-// Automatically resolves to 'assets/images/image.png'
-Imago.localImage('image')
-
-// With folder structure (/assets/images/...)
-Imago.localImage('icons/add')  // Resolves to assets/images/icons/add.png
-Imago.localImage('logos/app_logo')  // Resolves to assets/images/logos/app_logo.png
-Imago.localImage('illustrations/onboarding1')  // Resolves to assets/images/illustrations/onboarding1.png
-Imago.localImage('placeholders/placeholder')  // Resolves to assets/images/placeholders/placeholder.png
-
-// Or use full path
-Imago.localImage('assets/images/custom/image.png')
-```
-
-#### File Images
-```dart
-Imago.file('/storage/emulated/0/Download/image.jpg')
-```
 
 ### Factory Methods
 
@@ -248,11 +138,6 @@ Imago now uses an icon-based placeholder by default (`Icons.image_outlined`) ins
 
 - `cached_network_image: ^3.3.1` - For network image caching
 - `flutter_svg: ^2.0.10+1` - For SVG support
-
-## Requirements
-
-- Flutter >= 3.0.0
-- Dart >= 3.0.0
 
 ## Contributing
 
