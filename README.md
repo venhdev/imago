@@ -27,6 +27,18 @@ Then run:
 flutter pub get
 ```
 
+## Assets Structure
+
+Place your assets in these directories for automatic path resolution:
+
+- **SVG files**: `assets/svg/` (e.g., `assets/svg/icons/icon.svg`)
+- **Image files**: `assets/images/` (e.g., `assets/images/logos/logo.png`)
+- **Default placeholder**: `assets/images/placeholders/placeholder.png` (optional - uses icon fallback if not found)
+
+Imago automatically resolves paths:
+- `Imago.localSvg('icons/icon')` → `assets/svg/icons/icon.svg`
+- `Imago.localImage('logos/logo')` → `assets/images/logos/logo.png`
+
 ## Usage
 
 ### Basic Usage
