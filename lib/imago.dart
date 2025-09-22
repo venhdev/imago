@@ -372,12 +372,13 @@ class Imago extends StatelessWidget {
 
   /// Default placeholder widget when no custom placeholder is provided.
   Widget get _placeholderWidget => ClipRRect(
-        borderRadius: borderRadius,
+        borderRadius: BorderRadius.circular(8),
         child: Container(
           width: width,
           height: height,
           color: Colors.grey.shade200,
-          padding: const EdgeInsets.all(16),
+          // padding: const EdgeInsets.all(16),
+          alignment: alignment,
           child: Icon(
             Icons.image_outlined,
             size: (width != null && height != null)
